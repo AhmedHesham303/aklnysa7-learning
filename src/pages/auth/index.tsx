@@ -4,7 +4,7 @@ import { Form, Formik } from "formik";
 import { Mail } from "lucide-react";
 import * as Yup from "yup";
 import Logo from "@/components/common/logo";
-import { signIn } from "@/features/auth/services/signin";
+import { useSignin } from "@/features/auth/hooks/useSignin";
 type FormData = {
   email: string;
   password: string;
@@ -16,8 +16,9 @@ const validationSchema = Yup.object().shape({
     .required("Password is required"),
 });
 export default function AuthPage() {
+  const { mutate: signIn } = useSignin();
   const handleSubmit = (values: FormData) => {
-    signIn(values.email, values.password);
+    signIn(values);
   };
 
   return (
