@@ -51,20 +51,20 @@
 
 :root {
   --green-100: oklch(0.556 0.245 122.325);
-  --green-200: oklch(0.556 0.245 122.325);
+  --green-200: #497c5b;
   --green-300: oklch(0.556 0.245 122.325);
   --green-400: oklch(0.556 0.245 122.325);
   --green-700: oklch(0.3 0.024 155);
   --white-200: #f7f4ec;
   --background: var(--white-200);
   --foreground: var(--green-700);
-  --secondary-background: var(--white-200);
+  --secondary-background: var(--green-200);
   --foreground: var(--green-700);
   --card: var(--white-200);
   --card-foreground: var(--green-700);
   --popover: var(--white-200);
   --popover-foreground: var(--green-700);
-  --primary: var(--green-500);
+  --primary: var(--green-200);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);

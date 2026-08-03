@@ -1,43 +1,59 @@
-import { useState } from "react";
-
+import InputField from "@/components/fields/InputField";
+import { Button } from "@/components/ui/button";
+import { Form, Formik } from "formik";
+import { Mail } from "lucide-react";
+import * as Yup from "yup";
+import Logo from "@/components/common/logo";
+type FormData = {
+  email: string;
+  password: string;
+};
+const validationSchema = Yup.object().shape({
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  password: Yup.string()
+    .min(6, "Password must be at least 6 characters")
+    .required("Password is required"),
+});
 export default function AuthPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const handleSubmit = (values: FormData) => {
+    console.log(values);
+  };
+
   return (
-    <form
-      className="flex justify-center items-center h-screen"
-      onSubmit={(e) => {
-        e.preventDefault();
-        console.log("Email:", email);
-        console.log("Password:", password);
+    <Formik
+      initialValues={{
+        email: "",
+        password: "",
       }}
+      onSubmit={handleSubmit}
+      validationSchema={validationSchema}
     >
-      <div className="max-w-md flex flex-col gap-4 bg-white p-8 rounded-lg shadow-md">
-        <div className="flex flex-col gap-2">
-          <label htmlFor="email">Email</label>
-          <input
+      <Form className="flex justify-center items-center h-screen">
+        <div className="max-w-lg flex flex-col gap-4 bg-white p-4 rounded-lg shadow-md">
+          <section className="flex flex-col items-center gap-2">
+            <Logo />
+            <div className="flex flex-col items-center gap-1">
+              <h1 className="text-2xl font-bold">تسجيل الدخول</h1>
+              <h2 className="text-sm font-medium text-gray-600">
+                لوحة تحكم د. أحمد حمد
+              </h2>
+            </div>
+          </section>
+
+          <InputField
+            label="البريد الإلكتروني"
+            name="email"
             type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            icon={<Mail />}
           />
+
+          <InputField label="كلمة المرور" name="password" type="password" />
+
+          <Button type="submit" size="lg">
+            Sign In
+          </Button>
         </div>
-        <div className="flex flex-col gap-2">
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition-colors"
-        >
-          Sign In
-        </button>
-      </div>
-    </form>
+      </Form>
+    </Formik>
   );
 }
