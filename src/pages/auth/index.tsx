@@ -4,6 +4,7 @@ import { Form, Formik } from "formik";
 import { Mail } from "lucide-react";
 import * as Yup from "yup";
 import Logo from "@/components/common/logo";
+import { signIn } from "@/features/auth/services/signin";
 type FormData = {
   email: string;
   password: string;
@@ -16,7 +17,7 @@ const validationSchema = Yup.object().shape({
 });
 export default function AuthPage() {
   const handleSubmit = (values: FormData) => {
-    console.log(values);
+    signIn(values.email, values.password);
   };
 
   return (
@@ -29,7 +30,7 @@ export default function AuthPage() {
       validationSchema={validationSchema}
     >
       <Form className="flex justify-center items-center h-screen">
-        <div className="max-w-lg flex flex-col gap-4 bg-white p-4 rounded-lg shadow-md">
+        <div className="w-full max-w-sm flex flex-col gap-4 bg-white p-8 rounded-2xl shadow-md">
           <section className="flex flex-col items-center gap-2">
             <Logo />
             <div className="flex flex-col items-center gap-1">
@@ -49,8 +50,8 @@ export default function AuthPage() {
 
           <InputField label="كلمة المرور" name="password" type="password" />
 
-          <Button type="submit" size="lg">
-            Sign In
+          <Button type="submit" size="lg" className="font-bold ">
+            دخول للوحة التحكم
           </Button>
         </div>
       </Form>
