@@ -10,7 +10,7 @@ export const useSignin = () => {
       signIn(credentials),
     onSuccess: () => {
       toast.success("تم تسجيل الدخول بنجاح");
-      navigate("/dashboard");
+      navigate("/");
     },
     onError: (error) => {
       toast.error("فشل في تسجيل الدخول");
