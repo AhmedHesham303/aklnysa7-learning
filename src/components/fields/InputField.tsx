@@ -1,24 +1,28 @@
-import { ErrorMessage, Field } from "formik";
+import { Field, getIn, useFormikContext } from "formik";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
-import { useState, type ComponentProps } from "react";
+import { useState, type ComponentProps, type ReactNode } from "react";
+import FieldLabel from "./fieldContainers/FieldLabel";
+import FieldErrorMessage from "./fieldContainers/FieldErrorMessage";
+type InputType = "text" | "email" | "password";
 interface InputFieldProps extends ComponentProps<"input"> {
   containerClassName?: string;
-  label?: string;
-  type?: string;
+  label: ReactNode;
   labelClassName?: string;
   inputClassName?: string;
   errorClassName?: string;
   icon?: React.ReactNode;
-  eyeIcon?: boolean;
+  showEyeIcon?: boolean;
+  name: string;
   iconClassName?: string;
+  type: InputType;
 }
 export default function InputField({
   label,
   name,
-  type = "text",
-  eyeIcon = true,
+  showEyeIcon = true,
   containerClassName,
+  type = "text",
   labelClassName,
   inputClassName,
   errorClassName,
@@ -27,37 +31,47 @@ export default function InputField({
   ...props
 }: InputFieldProps) {
   const [showPassword, setShowPassword] = useState(false);
+
+  const togglePassword = () => setShowPassword((prev) => !prev);
+  const isPassword = type === "password";
+  const { errors } = useFormikContext();
+  const fieldError = getIn(errors, name);
+
   return (
     <div className={cn("flex flex-col gap-1", containerClassName)}>
-      <label
+      <FieldLabel
         htmlFor={name}
-        className={cn("text-sm font-medium", labelClassName)}
-      >
-        {label || name}
-      </label>
+        label={label}
+        labelClassName={labelClassName}
+      />
       <div
         className={cn(
           "flex items-center rounded-md border px-2 py-1",
-          "focus-within:border-blue-500",
-          "focus-within:ring-2 focus-within:ring-blue-500",
+          cn(
+            "flex items-center...",
+            fieldError ? "border-red-500" : "focus-within:border-primary",
+          ),
+          fieldError
+            ? "border-red-500 focus-within:ring-red-500"
+            : "focus-within:border-primary focus-within:ring-primary",
         )}
       >
         <Field
           id={name}
           name={name}
-          type={type === "password" && showPassword ? "text" : type}
+          type={isPassword && showPassword ? "text" : type}
           className={cn("flex-1 bg-transparent outline-none", inputClassName)}
           {...props}
         />
 
-        {icon && type !== "password" && (
+        {icon && !isPassword && (
           <span className={cn("text-gray-500", iconClassName)}>{icon}</span>
         )}
-        {eyeIcon && type === "password" && (
+        {showEyeIcon && isPassword && (
           <Button
             type="button"
             className={cn("text-gray-500 bg-transparent! ", iconClassName)}
-            onClick={() => setShowPassword((prev) => !prev)}
+            onClick={togglePassword}
             variant="ghost"
             size="icon"
           >
@@ -65,13 +79,7 @@ export default function InputField({
           </Button>
         )}
       </div>
-      <ErrorMessage name={name}>
-        {(msg) => (
-          <span className={cn("text-red-500 text-[10px]", errorClassName)}>
-            {msg}
-          </span>
-        )}
-      </ErrorMessage>
+      <FieldErrorMessage name={name} className={errorClassName} />
     </div>
   );
 }

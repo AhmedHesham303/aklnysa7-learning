@@ -3,6 +3,7 @@ import { useGetUser } from "@/features/auth/hooks/useGetUser";
 
 export default function AuthLayout() {
   const { data: user, isLoading } = useGetUser();
+  return <Navigate to="/signin" replace />;
 
   if (isLoading) {
     return <div>Loading...</div>;
