@@ -1,9 +1,8 @@
 import { ErrorMessage, Field } from "formik";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
-import { useState } from "react";
-type InputFieldProps = {
-  name: string;
+import { useState, type ComponentProps } from "react";
+interface InputFieldProps extends ComponentProps<"input"> {
   containerClassName?: string;
   label?: string;
   type?: string;
@@ -11,14 +10,13 @@ type InputFieldProps = {
   inputClassName?: string;
   errorClassName?: string;
   icon?: React.ReactNode;
-  placeholder?: string;
   eyeIcon?: boolean;
   iconClassName?: string;
-};
+}
 export default function InputField({
   label,
-  type = "text",
   name,
+  type = "text",
   eyeIcon = true,
   containerClassName,
   labelClassName,
@@ -26,7 +24,7 @@ export default function InputField({
   errorClassName,
   icon,
   iconClassName,
-  placeholder,
+  ...props
 }: InputFieldProps) {
   const [showPassword, setShowPassword] = useState(false);
   return (
@@ -48,8 +46,8 @@ export default function InputField({
           id={name}
           name={name}
           type={type === "password" && showPassword ? "text" : type}
-          placeholder={placeholder ?? label ?? name}
           className={cn("flex-1 bg-transparent outline-none", inputClassName)}
+          {...props}
         />
 
         {icon && type !== "password" && (
